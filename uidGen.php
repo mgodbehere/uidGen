@@ -20,7 +20,7 @@ function sql_connect($host, $user, $pass, $db)
 function insertData($con, $table, $columns, $values)
 {
 	//$con = sql_connect();
-	
+
 	if(is_array($columns))
 	{
 		$cols = implode(", ", $columns);
@@ -32,7 +32,7 @@ function insertData($con, $table, $columns, $values)
 		$cols = $columns;
 		$vals = $values;
 	}
-	
+
 	$statement = "INSERT INTO " . $table ." (" . $cols . ") VALUES (" . $vals . ")";
 
 	mysqli_query($con, $statement);
@@ -40,7 +40,7 @@ function insertData($con, $table, $columns, $values)
 }
 
 function selectData($con, $column, $table, $where = "")
-{		
+{
 	if(is_array($where)) // checks if query has where parameters only arrays valid
 	{
 		$stateWhere = ""; // holds the where clause for the statment
@@ -55,24 +55,24 @@ function selectData($con, $column, $table, $where = "")
 				$stateWhere = $stateWhere . $col . "='" . $val . "' AND ";
 			}
 		}
-		
+
 		$statement = "SELECT " . $column . " FROM " . $table . " WHERE " . $stateWhere;
 	}
 	else
 	{
 		$statement = "SELECT " . $column . " FROM " . $table;
 	}
-	
+
 	$query = mysqli_query($con, $statement);
 	$queryData = mysqli_fetch_all($query, MYSQLI_ASSOC);
-	
+
 	return $queryData;
 }
 
-function id_gen($uidNumber, $uidGroups, $uidPrefix, $uidSeperator, $database = false)
+function id_gen($uidNumber = 5, $uidGroups = 5, $uidPrefix = "uid", $uidSeperator = "-", $database = false)
 {
 //		$con = sql_connect();
-	
+
 	/// ***** NO error handling if type not in map throws up errors
 
 	$uid = ""; // var ready to hold the generated id number
@@ -90,14 +90,14 @@ function id_gen($uidNumber, $uidGroups, $uidPrefix, $uidSeperator, $database = f
 				//$uid = $uid.mt_rand(0,9);
 				$uid = $uid.mt_rand(0,9);
 			}
-			
+
 			// Split the groups with the seperator
 			if($group != end($numberGroups))
 			{
 				$uid = $uid.$uidSeperator;
 			}
 		}
-		
+
 		$uid = $uidPrefix != "" ? $uidPrefix.$uidSeperator.$uid : $uid; // completing the uid with a prefix if entered
 //			$uid = "uid-uid-03393-14004-75991-99760-80704";
 
@@ -108,7 +108,7 @@ function id_gen($uidNumber, $uidGroups, $uidPrefix, $uidSeperator, $database = f
 			if(in_array(false, $database, true) == false)
 			{
 				$conDB = sql_connect($database['databaseHost'], $database['databaseUser'], $database['databasePass'], $database['databaseName']); // try connecting to the database with entered details returns false if there is a failed connection
-				
+
 				if($conDB)
 				{
 					$uidCheck = selectData($conDB, $database['databaseColumn'], $database['databaseTable'], array("uid" => $uid)); // check if the generated uid is in the database
@@ -117,7 +117,7 @@ function id_gen($uidNumber, $uidGroups, $uidPrefix, $uidSeperator, $database = f
 				{
 					$uid = "There is an issue connecting to the database please check the connection details and try again."; // error message to display
 				}
-				
+
 				// if the uid isn't in the database then we break the while loop
 				if(!isset($uidCheck[0]))
 				{
@@ -144,11 +144,11 @@ function id_gen($uidNumber, $uidGroups, $uidPrefix, $uidSeperator, $database = f
 //				insertData($conDB, $database['databaseTable'], array($database['databaseColumn']), array($uid));
 				break;
 			}
-		}			
+		}
 	}
 	return $uid;
 }
-	
+
 if($_SERVER['REQUEST_METHOD'] == 'POST')
 {
 	// check and assign DB connection vars
