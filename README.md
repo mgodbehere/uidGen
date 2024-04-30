@@ -5,8 +5,6 @@
 Copy the uidGen.php & uidInterface.php files onto a server running PHP then in a browser navigate to the uidInterface.php file to view a demo of its usage.
 Or copy the uidGen.php into your project file then use the function include("PATH TO uidGen.php")
 
-// ADD IN DB CONNECTION DETAILS
-
 ## Usage
 Call the id_gen(int Length, int LengthGroups, string Prefix, string Seperator, array Database(optional)) function to generate an id number
 
