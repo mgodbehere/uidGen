@@ -63,7 +63,7 @@
 			else
 			{
 				$.ajax({
-					url: "uidGen.php",
+					url: "./uidGen.php",
 					type: "post",
 					data: {uidNumber:uidNumber, uidGroups:uidGroups, uidPrefix:uidPrefix, uidSeperator:uidSeperator, databaseHost:databaseHost, databaseName:databaseName, databaseTable:databaseTable, databaseColumn:databaseColumn, databaseUser:databaseUser, databasePass:databasePass, databaseInput:databaseInput},
 					success: function(data){
@@ -76,7 +76,7 @@
 		else
 		{
 			$.ajax({
-				url: "uidGen.php",
+				url: "./uidGen.php",
 				type: "post",
 				data: {uidNumber:uidNumber, uidGroups:uidGroups, uidPrefix:uidPrefix, uidSeperator:uidSeperator},
 				success: function(data){
@@ -97,7 +97,6 @@
 </head>
 <body>
 <main>
-	
 	<div class="container p-3 vh-100 justify-content-center align-items-center">
 		<div class="row alert alert-danger justify-content-center invisible" id="alert" role="alert">
 			A simple primary alert—check it out!
