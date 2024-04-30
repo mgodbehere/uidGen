@@ -69,7 +69,7 @@ function selectData($con, $column, $table, $where = "")
 	return $queryData;
 }
 
-function id_gen($uidNumber = 5, $uidGroups = 5, $uidPrefix = "uid", $uidSeperator = "-", $database = false)
+function id_gen($uidNumber, $uidGroups, $uidPrefix, $uidSeperator, $database = false)
 {
 //		$con = sql_connect();
 
@@ -105,7 +105,9 @@ function id_gen($uidNumber = 5, $uidGroups = 5, $uidPrefix = "uid", $uidSeperato
 		if(strlen($uid) >= ($uidNumber * $uidGroups))
 		{
 			// if database details have been entered we check the generated uid to database
-			if(in_array(false, $database, true) == false)
+			//var_dump($database);
+			//if(in_array(false, $database, true) == false)
+			if($database)
 			{
 				$conDB = sql_connect($database['databaseHost'], $database['databaseUser'], $database['databasePass'], $database['databaseName']); // try connecting to the database with entered details returns false if there is a failed connection
 
@@ -159,8 +161,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
 	$dbUser = !empty($_POST['databaseUser']) ? $_POST['databaseUser'] : false;
 	$dbPass = !empty($_POST['databasePass']) ? $_POST['databasePass'] : false;
 	$dbInput = str_contains($_POST['databaseInput'], "true") ? $_POST['databaseInput'] : false;
+	$dbDetails = array("databaseHost" => $dbHost, "databaseName" => $dbName, "databaseTable" => $dbTable, "databaseColumn" => $dbColumn, "databaseUser" => $dbUser, "databasePass" => $dbPass, "databaseInput" => $dbInput);
+	
+	// check if any false elements in dbDetails if there is we throw a false flag so id_gen doesn't process bad db info
+	$dbCheck = in_array(false, $dbDetails, true) ? false : $dbDetails;
 
-	echo(id_gen($_POST['uidNumber'], $_POST['uidGroups'], $_POST['uidPrefix'], $_POST['uidSeperator'], array("databaseHost" => $dbHost, "databaseName" => $dbName, "databaseTable" => $dbTable, "databaseColumn" => $dbColumn, "databaseUser" => $dbUser, "databasePass" => $dbPass, "databaseInput" => $dbInput)));
+	echo(id_gen($_POST['uidNumber'], $_POST['uidGroups'], $_POST['uidPrefix'], $_POST['uidSeperator'], $dbCheck));
 //	$uid = id_gen($_POST['uidNumber'], $_POST['uidGroups'], $_POST['uidPrefix'], $_POST['uidSeperator'], array("databaseHost" => $dbHost, "databaseName" => $dbName, "databaseTable" => $dbTable, "databaseColumn" => $dbColumn, "databaseUser" => $dbUser, "databasePass" => $dbPass));
 //	var_dump($_POST);
 	foreach($_POST as $item)
